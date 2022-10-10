@@ -1,0 +1,63 @@
+```{r,echo=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(GGally)
+library(lmtest)
+```
+
+```{r}
+air = airquality
+```
+
+```{r}
+air2 = air %>% drop_na()
+```
+
+```{r}
+mod1 = lm(Ozone ~ Solar.R, air2)
+summary(mod1)
+
+mod2 = lm(Ozone ~ Wind, air2)
+summary(mod2)
+
+mod3 = lm(Ozone ~ Temp, air2)
+summary(mod3)
+
+mod4 = lm(Ozone ~ Month, air2)
+summary(mod4)
+
+mod5 = lm(Ozone ~ Day, air2)
+summary(mod5)
+
+```
+
+```{r}
+credit_simple = recipe(Ozone ~ Temp, air2)
+credit_simple
+```
+
+```{r}
+lm_model = 
+  linear_reg() %>%
+  set_engine("lm")
+```
+
+```{r}
+lm_wflow = 
+  workflow() %>%
+  add_model(lm_model) %>%
+  add_recipe(credit_simple)
+```
+
+```{r}
+lm_fit = fit(lm_wflow, air2)
+```
+
+```{r}
+summary(lm_fit$fit$fit$fit)
+```
+
+```{r}
+-147.6461 + 2.4391*80
+```
+

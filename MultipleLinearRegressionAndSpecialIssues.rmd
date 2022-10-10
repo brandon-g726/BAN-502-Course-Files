@@ -1,0 +1,98 @@
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(GGally)
+library(ggcorrplot)
+library(MASS)
+library(car)
+library(lubridate)
+library(lmtest)
+library(splines)
+library(esquisse)
+```
+
+```{r}
+library(readr)
+bike <- read_csv("bike_cleaned-3.csv")
+```
+
+```{r}
+bike = bike %>% mutate(dteday = mdy(dteday))
+```
+
+```{r}
+bike = bike %>% mutate_if(is.character, as_factor)
+```
+
+```{r}
+bike = bike %>% mutate(hr = as_factor(hr))
+```
+
+```{r}
+mod1 = lm(count ~ windspeed, bike)
+summary(mod1)
+
+mod2 = lm(count ~ hum, bike)
+summary(mod2)
+
+mod3 = lm(count ~ atemp, bike)
+summary(mod3)
+
+mod4 = lm(count ~ temp, bike)
+summary(mod4)
+```
+
+
+```{r}
+credit_simple = recipe(count ~ hr + temp, bike)
+credit_simple
+```
+
+```{r}
+lm_model = 
+  linear_reg() %>%
+  set_engine("lm")
+```
+
+```{r}
+lm_wflow = 
+  workflow() %>%
+  add_model(lm_model) %>%
+  add_recipe(credit_simple)
+```
+
+```{r}
+lm_fit = fit(lm_wflow, bike)
+```
+
+```{r}
+summary(lm_fit$fit$fit$fit)
+```
+
+```{r}
+credit_simple2 = recipe(count ~ temp + atemp, bike)
+credit_simple2
+```
+
+
+```{r}
+lm_model2 = 
+  linear_reg() %>%
+  set_engine("lm")
+```
+
+```{r}
+lm_wflow2 = 
+  workflow() %>%
+  add_model(lm_model) %>%
+  add_recipe(credit_simple2)
+```
+
+```{r}
+lm_fit2 = fit(lm_wflow2, bike)
+```
+
+```{r}
+summary(lm_fit2$fit$fit$fit)
+```

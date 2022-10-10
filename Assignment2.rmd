@@ -1,0 +1,46 @@
+
+```{r}
+library (tidyverse)
+InventoryData <- read_csv("InventoryData.csv")
+View(InventoryData)
+library(esquisse)
+```
+
+```{r}
+diamonddata <- as_tibble(diamonds)
+```
+
+```{r}
+view(diamonds)
+```
+
+```{r}
+ggplot(diamonddata) +
+ aes(x = carat, y = price) +
+ geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+ theme_minimal()
+```
+
+```{r}
+
+```
+
+
+
+```{r}
+mean(InventoryData$`On Hand`)
+```
+
+
+```{r}
+inventoryA <- filter(InventoryData, Supplier == "A")
+```
+
+```{r}
+inventoryA <- mutate(inventoryA, OnHandRatio = `On Hand` / `Annual Demand`)
+```
+
+```{r}
+ave_cost <- filter(inventoryA, `Item SKU` == '011')
+```
+
